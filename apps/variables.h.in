@@ -1,0 +1,8 @@
+#pragma once
+#include <string>
+
+class Variables {
+public:
+	std::string glslcExecutablePath = "@Vulkan_GLSLC_EXECUTABLE_PATH_PROJECT@";
+private:
+};
