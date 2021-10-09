@@ -25,8 +25,6 @@ std::vector<char> HelperFunctions::readFile(const std::string& filename)
 {
 	std::ifstream file(filename, std::ios::ate | std::ios::binary);
 
-	std::cout << var.glslcExecutablePath << std::endl;
-
 	if (!file.is_open()) {
 		throw std::runtime_error("failed to open file");
 	}
