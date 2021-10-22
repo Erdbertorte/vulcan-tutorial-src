@@ -14,6 +14,8 @@
 #include <algorithm>
 #include <Windows.h>
 #include <io.h>
+#include <glm/glm.hpp>
+#include <array>
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
@@ -41,7 +43,7 @@ public:
 	void run();
 
 private:
-	//variables
+	//VARIABLES
 	GLFWwindow* window;
 	VkInstance instance;
 	VkDebugUtilsMessengerEXT debugMessenger;
@@ -82,6 +84,7 @@ private:
 	std::vector <VkFramebuffer> swapChainFramebuffers;
 
 	VkCommandPool commandPool;
+	VkCommandPool transferCommandPool;
 	std::vector<VkCommandBuffer> commandBuffers;
 
 	std::vector<VkSemaphore> imageAvailableSemaphores;
@@ -90,7 +93,34 @@ private:
 	std::vector<VkFence> imagesInFlight;
 	size_t currentFrame = 0;
 
-	//functions
+	bool framebufferResized = false;
+
+	struct Vertex
+	{
+		glm::vec2 pos;
+		glm::vec3 color;
+
+		static VkVertexInputBindingDescription getBindingDescription();
+		static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions();
+	};
+
+	const std::vector<Vertex> vertices = {
+	{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+	{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
+	{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
+	{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
+	};
+
+	const std::vector<uint16_t> indices = {
+	0, 1, 2, 2, 3, 0
+	};
+
+	VkBuffer vertexBuffer;
+	VkDeviceMemory vertexBufferMemory;
+	VkBuffer indexBuffer;
+	VkDeviceMemory indexBufferMemory;
+
+	//FUNCTIONS
 	void initWindow();
 	void initVulkan();
 	void mainLoop();
@@ -133,4 +163,16 @@ private:
 	void createSyncObjects();
 
 	void keyCallback();
+
+	void recreateSwapChain();
+	void cleanupSwapChain();
+	static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
+
+	void createVertexBuffer();
+	uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
+
+	void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
+	void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
+
+	void createIndexBuffer();
 };
