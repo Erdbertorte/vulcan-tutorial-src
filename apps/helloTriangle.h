@@ -14,7 +14,11 @@
 #include <algorithm>
 #include <Windows.h>
 #include <io.h>
+#define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <chrono>
 #include <array>
 
 const uint32_t WIDTH = 800;
@@ -63,6 +67,12 @@ private:
 		std::vector<VkSurfaceFormatKHR> formats;
 		std::vector<VkPresentModeKHR> presentModes;
 	};
+	struct UniformBufferObject {
+		//always be specific abaout alignments
+		alignas(16) glm::mat4 model;
+		alignas(16) glm::mat4 view;
+		alignas(16) glm::mat4 projection;
+	};
 	VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
 	VkDevice device;
 
@@ -78,6 +88,9 @@ private:
 	std::vector <VkImageView> swapChainImageViews;
 
 	VkRenderPass renderPass;
+	VkDescriptorPool descriptorPool;
+	std::vector<VkDescriptorSet> descriptorSets;
+	VkDescriptorSetLayout m_descriptorSetLayout;
 	VkPipelineLayout pipelineLayout;
 	VkPipeline graphicsPipeline;
 
@@ -119,6 +132,9 @@ private:
 	VkDeviceMemory vertexBufferMemory;
 	VkBuffer indexBuffer;
 	VkDeviceMemory indexBufferMemory;
+
+	std::vector<VkBuffer> uniformBuffers;
+	std::vector<VkDeviceMemory> uniformBuffersMemory;
 
 	//FUNCTIONS
 	void initWindow();
@@ -175,4 +191,11 @@ private:
 	void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 
 	void createIndexBuffer();
+
+	void createDescriptorSetLayout();
+	void createUniformBuffers();
+	void updateUniformBuffer(uint32_t currentImage);
+
+	void createDescriptorPool();
+	void createDescriptorSets();
 };
