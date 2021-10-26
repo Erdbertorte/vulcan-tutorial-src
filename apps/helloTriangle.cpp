@@ -568,7 +568,7 @@ void HelloTriangleApplication::createGraphicsPipeline()
 	rasterizer.rasterizerDiscardEnable = VK_FALSE;
 	rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
 	rasterizer.lineWidth = 1.0f;
-	rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
+	rasterizer.cullMode = VK_CULL_MODE_NONE; //VK_CULL_MODE_FRONT_AND_BACK, VK_CULL_MODE_FRONT_BIT, VK_CULL_MODE_BACK_BIT
 	rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
 	rasterizer.depthBiasEnable = VK_FALSE;
 	rasterizer.depthBiasConstantFactor = 0.0f; // Optional
@@ -998,7 +998,7 @@ std::array<VkVertexInputAttributeDescription, 2> HelloTriangleApplication::Verte
 	//POSITION
 	attributeDescriptions[0].binding = 0; //from which binding the per-vertex data comes
 	attributeDescriptions[0].location = 0; //location parameter references the location directive of the input in the vertex shader
-	attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT; //type of data for the attribute - implicitly defines the byte size of attribute data
+	attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT; //type of data for the attribute - implicitly defines the byte size of attribute data
 	//float: VK_FORMAT_R32_SFLOAT
 	//vec2: VK_FORMAT_R32G32_SFLOAT
 	//vec3 : VK_FORMAT_R32G32B32_SFLOAT
@@ -1146,6 +1146,8 @@ void HelloTriangleApplication::createIndexBuffer()
 
 void HelloTriangleApplication::createDescriptorSetLayout()
 {
+	//The descriptor layout specifies the types of resources that are going to be accessed by the pipeline
+
 	VkDescriptorSetLayoutBinding uboLayoutBinding{};
 	uboLayoutBinding.binding = 0;
 	uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;

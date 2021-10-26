@@ -12,7 +12,7 @@ target_include_directories(main PUBLIC "${Vulkan_INCLUDE_DIRS}" "${GLM_INCLUDE_D
 target_link_directories(main PUBLIC "${Vulkan_LIBRARY}" "${CMAKE_BINARY_DIR}/include/glfw/src/Debug")
 
 add_library(GLFW_LIB STATIC IMPORTED)
-set_target_properties(GLFW_LIB PROPERTIES IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/include/glfw/src/Debug/glfw3.lib")
+set_target_properties(GLFW_LIB PROPERTIES IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/src/glfw/src/Debug/glfw3.lib")
 message(STATUS "GLFW found at ${CMAKE_BINARY_DIR}")
 target_link_libraries(main GLFW_LIB)
 
